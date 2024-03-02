@@ -1,0 +1,3 @@
+websocket-client==1.6.2
+w2project-0.0.1.tar.gz
+pydantic==2.3.0

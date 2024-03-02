@@ -1,0 +1,11 @@
+{
+    "url": "https://api.circuitotormenta.com/",
+    "url_tournaments": "/api/v001/showcase/circuito-tormenta/tournaments",
+    "url_tournament": "/api/v001/showcase/circuito-tormenta/tournament/{}",
+    "url_team": " /api/v001/showcase/circuito-tormenta/equipo/{}",
+    "riot_region": "euw1",
+    "riot_api": "RGAPI-15fa67aa-1c1b-499a-bd1d-7146fa0100ee",
+    "w2_user": "latra",
+    "w2_password": "secret",
+    "w2_url": "http://localhost:8001"
+}
