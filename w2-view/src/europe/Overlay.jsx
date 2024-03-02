@@ -77,73 +77,84 @@ export default class Overlay extends React.Component {
                 {Object.keys(state).length === 0 && <div className={cx(css.infoBox)}>Not connected to backend service!</div>}
                 {Object.keys(state).length !== 0 &&
                 
-                <div className={cx(css.ChampSelect)}>
+                    <div className={cx(css.ChampSelect)}>
 
-                    <div className={cx(css.MiddleBox)}>
-                        
-                        <div className={cx(css.Logo)}>
-                            <img src={!state.blueTeam.isActive && !state.redTeam.isActive ? config.logo :
-                             state.blueTeam.isActive && !state.redTeam.isActive ? config.blueTeam.logo :
-                             config.redTeam.logo 
-                            } alt="" />
-
-                        </div>
-                        <div className={cx(css.Patch)}>
-                        {!state.blueTeam.isActive && !state.redTeam.isActive ? config.tournamentName :
-                             state.blueTeam.isActive && !state.redTeam.isActive ? config.blueTeam.name :
-                             config.redTeam.name 
-                            }                        </div>
-                        <div className={cx(css.Timer, {
-                            [`${css.Red} ${css.Blue}`]: !state.blueTeam.isActive && !state.redTeam.isActive,
-                            [css.Blue]: state.blueTeam.isActive,
-                            [css.Red]: state.redTeam.isActive
-                        })}>
-                            <div className={cx(css.Background, css.Blue)} />
-                            <div className={cx(css.Background, css.Red)} />
-
+                        <div className={cx(css.MiddleBox)}>
                             
-                            {state.timer < 100 && <div className={cx(css.TimerChars)}>
-                                {state.timer.toString().split('').map((char, idx) => <div key={`div-${idx}`}
-                                    className={cx(css.TimerChar)}></div>)}
-                            </div>}
+                            <div className={cx(css.Logo)}>
+                                <img src={!state.anyTeam ? config.logo :
+                                state.blueTeam.isActive && !state.redTeam.isActive ? config.blueTeam.logo :
+                                config.redTeam.logo 
+                                } alt="" />
 
-                        </div>
-                    </div>
-                    {renderTeam(css.TeamBlue, config.blueTeam, state.blueTeam)}
-                    {renderTeam(css.TeamRed, config.redTeam, state.redTeam)}
-                    <div style={{
+                            </div>
+                            <div className={cx(css.Patch)}>
+                            {!state.blueTeam.isActive && !state.redTeam.isActive ? config.tournamentName :
+                                state.blueTeam.isActive && !state.redTeam.isActive ? config.blueTeam.name :
+                                config.redTeam.name 
+                                }                        
+                            </div>
                         
-                          position: 'absolute',
-                          left: '80px',
-                            bottom: '365px',
-                            height: '10px', // Altura de la barra
-                            backgroundColor: 'grey', // Color de fondo
-                            width: `1760px`,
-                            transformOrigin: 'center', // Establece el origen de la transformación en el centro
-                            animation: 'expandFromCenter 2s linear'
-                            // Ancho calculado en píxeles
-                        }}></div>
-                    <div style={{
-                          position: 'absolute',
-                          left: '960px',
-                            bottom: '365px',
-                            height: '10px', // Altura de la barra
-                            backgroundColor: 'lightgrey', // Color de fondo
-                            width: `${(state.timer / 30000) * 880}px`,
-                            transition: 'width 1s linear' // Agrega esta línea
-                            // Ancho calculado en píxeles
-                        }}></div>
-                                            <div style={{
-                          position: 'absolute',
-                          right: '960px',
-                            bottom: '365px',
-                            height: '10px', // Altura de la barra
-                            backgroundColor: 'lightgrey', // Color de fondo
-                            width: `${(state.timer / 30000) * 880}px`,
-                            transition: 'width 1s linear' // Agrega esta línea
-                            // Ancho calculado en píxeles
-                        }}></div>
-                </div>}
+                                <div className={cx(css.Timer, {
+                                    [`${css.Red} ${css.Blue}`]: !state.blueTeam.isActive && !state.redTeam.isActive,
+                                    [css.Blue]: state.blueTeam.isActive,
+                                    [css.Red]: state.redTeam.isActive
+                                })}>
+                                <div className={cx(css.Background, css.Blue)} />
+                                <div className={cx(css.Background, css.Red)} />
+
+                                
+                                {state.timer < 100 && <div className={cx(css.TimerChars)}>
+                                    {state.timer.toString().split('').map((char, idx) => <div key={`div-${idx}`}
+                                        className={cx(css.TimerChar)}></div>)}
+                                </div>}
+
+                            </div>
+                        </div>
+                        {renderTeam(css.TeamBlue, config.blueTeam, state.blueTeam)}
+                        {renderTeam(css.TeamRed, config.redTeam, state.redTeam)}
+                        {state.anyTeam ? (
+                        <>
+                        <div style={{
+                            
+                            position: 'absolute',
+                            left: '80px',
+                                bottom: '365px',
+                                height: '10px', // Altura de la barra
+                                backgroundColor: 'grey', // Color de fondo
+                                width: `1760px`,
+                                transformOrigin: 'center', // Establece el origen de la transformación en el centro
+                                animation: 'expandFromCenter 2s linear'
+                                // Ancho calculado en píxeles
+                            }}>
+                        </div>
+                        <div style={{
+                            position: 'absolute',
+                            left: '960px',
+                                bottom: '365px',
+                                height: '10px', // Altura de la barra
+                                backgroundColor: 'lightgrey', // Color de fondo
+                                width: `${(state.timer / 30000) * 880}px`,
+                                transition: 'width 1s linear' // Agrega esta línea
+                                // Ancho calculado en píxeles
+                            }}>
+                        </div>
+                        <div style={{
+                            position: 'absolute',
+                            right: '960px',
+                                bottom: '365px',
+                                height: '10px', // Altura de la barra
+                                backgroundColor: 'lightgrey', // Color de fondo
+                                width: `${(state.timer / 30000) * 880}px`,
+                                transition: 'width 1s linear' // Agrega esta línea
+                                // Ancho calculado en píxeles
+                            }}>
+                        </div>
+                        </>
+                        ) : null }
+
+                    </div>
+                }
             </div>
         )
     }

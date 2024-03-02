@@ -17,6 +17,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+[tool.hatch.build.targets.wheel]
+packages = ["w2project"]
+
 [project.urls]
 "Homepage" = "https://github.com/W2Avalanche"
 "Bug Tracker" = "https://github.com/W2Avalanche/W2Avalanche/issues"

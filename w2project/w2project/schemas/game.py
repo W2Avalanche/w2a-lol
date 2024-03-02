@@ -1,6 +1,11 @@
 from pydantic import BaseModel, Field
 from typing import Optional
-from enum import Enum, IntEnum
+from enum import Enum, IntEnum, StrEnum
+
+class PickStatusEnum(StrEnum):
+    wating = "waiting"
+    on_going = "ongoing"
+    finished = "finished"
 
 class PickPhasesEnum(IntEnum):
     ban_blue_1 = 0
@@ -40,6 +45,7 @@ class GameStatus(BaseModel):
     blue_team : GameTeam
     red_team : GameTeam
     phase: PickPhasesEnum
+    state: PickStatusEnum
     timer : int
 
 class GameConfig(BaseModel):
@@ -100,6 +106,7 @@ class ViewGameState(BaseModel):
     timer: int
     champSelectActive: bool
     leagueConnected: bool
+    anyTeam: bool
 class ViewGame(BaseModel):
     eventType: str 
     state: ViewGameState

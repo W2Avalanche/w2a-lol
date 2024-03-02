@@ -2,7 +2,7 @@ from websocket import create_connection, WebSocketTimeoutException
 import json
 import logging
 from w2project.schemas.dawe import Status
-from w2project.schemas.game import GameStatus, GameTeam, PickPhasesEnum, GameMessage, GameConfig
+from w2project.schemas.game import GameStatus, GameTeam, PickPhasesEnum, GameMessage, PickStatusEnum
 class DaweGame:
     def __init__(self, room_id: str, dawe_url: str, gamemanager_url: str) -> None:
         self.room_id = room_id
@@ -35,6 +35,7 @@ class DaweGame:
             blue_team = GameTeam(picks=dawe_data_status.bluePicks, bans=dawe_data_status.blueBans, active=PickPhasesEnum(dawe_data_status.turn).is_blue_turn()), 
             red_team = GameTeam(picks=dawe_data_status.redPicks, bans=dawe_data_status.redBans, active=PickPhasesEnum(dawe_data_status.turn).is_red_turn()), 
             phase = dawe_data_status.turn,
+            state = PickStatusEnum(dawe_data_status.state),
             timer=dawe_data_status.nextTimeout)
         game_message = GameMessage(origin= "dawe",type = "UPDATE", status=internal_status, user='patata', dawe_id = self.room_id, config=None)
         self.w2_connection.send(game_message.model_dump_json())

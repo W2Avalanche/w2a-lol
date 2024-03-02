@@ -2,7 +2,6 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect, BackgroundTasks
 from utils import ConnectionManager
 import docker
 from w2project.schemas.game import GameMessage, ViewGame
-from dawe import DaweGame
 from game import Game
 app = FastAPI()
 app.games = {}

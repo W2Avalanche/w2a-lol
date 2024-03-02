@@ -1,4 +1,4 @@
-from w2project.schemas.game import GameConfig, ViewGame, ViewGameState, ViewGameConfig, ViewTeamConfig, ViewTeamState
+from w2project.schemas.game import GameConfig, ViewGame, ViewGameState, ViewGameConfig, ViewTeamConfig, ViewTeamState, PickStatusEnum
 from w2project.schemas.team import Team
 from w2project.schemas.game import GameStatus, ViewSelect, ViewChampion, PickPhasesEnum
 
@@ -40,7 +40,8 @@ class Game:
                 ),
                 timer = 30,
                 champSelectActive = True,
-                leagueConnected = True
+                leagueConnected = True,
+                anyTeam = False
             )
         )
         self.blue_players = game_config.blue_team_players
@@ -52,9 +53,8 @@ class Game:
     
    
     def load_new_status(self, new_status: GameStatus):
-    #         picks: list[str]
-    # bans: list[str]
-    # active: bool
+        self.viewGame.state.anyTeam = False if new_status.state != PickStatusEnum.on_going else True
+
         self.viewGame.state.blueTeam = ViewTeamState(picks = [], bans = [], isActive = new_status.blue_team.active)
         for champ in new_status.blue_team.bans:
             self.viewGame.state.blueTeam.bans.append(
