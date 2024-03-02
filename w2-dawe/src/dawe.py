@@ -29,6 +29,8 @@ class DaweGame:
                 if self.last_known_status:
                     self.last_known_status.nextTimeout -= 1000 if self.last_known_status.nextTimeout >= 1000 else 0
                     self.send_game_status(self.last_known_status)
+                    if self.last_known_status.state == PickStatusEnum.finished: 
+                        exit()
 
     def send_game_status(self, dawe_data_status: Status):
         internal_status = GameStatus(
