@@ -5,8 +5,8 @@ from w2project.schemas.game import GameMessage, ViewGame
 from dawe import DaweGame
 from game import Game
 app = FastAPI()
-app.games : dict[str, Game]= {}
-app.dockers : dict[str, object] = {}
+app.games = {}
+app.dockers = {}
 #TODO: revisar el caso de varias partidas simultaneas // como crear y mantener las conexiones
 app.view_manager = ConnectionManager()
 app.game_manager = ConnectionManager()
