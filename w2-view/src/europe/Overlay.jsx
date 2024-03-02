@@ -15,13 +15,10 @@ export default class Overlay extends React.Component {
         this.setState({openingAnimationPlayed: true});
         setTimeout(() => {
             this.setState({currentAnimationState: css.AnimationHidden});
-
             setTimeout(() => {
                 this.setState({currentAnimationState: css.AnimationTimer + ' ' + css.AnimationBansPick});
-
                 setTimeout(() => {
                     this.setState({currentAnimationState: css.AnimationBansPick + ' ' + css.AnimationBansPickOnly});
-
                     setTimeout(() => {
                         this.setState({currentAnimationState: css.AnimationPigs});
                     }, 1000);
@@ -109,9 +106,7 @@ export default class Overlay extends React.Component {
                                 {state.timer.toString().split('').map((char, idx) => <div key={`div-${idx}`}
                                     className={cx(css.TimerChar)}></div>)}
                             </div>}
-                            {state.timer >= 100 && <div className={cx(css.TimerChars)}>
-                                {state.timer}
-                            </div>}
+
                         </div>
                     </div>
                     {renderTeam(css.TeamBlue, config.blueTeam, state.blueTeam)}
@@ -134,7 +129,7 @@ export default class Overlay extends React.Component {
                             bottom: '365px',
                             height: '10px', // Altura de la barra
                             backgroundColor: 'lightgrey', // Color de fondo
-                            width: `${(state.timer / 30) * 880}px`,
+                            width: `${(state.timer / 30000) * 880}px`,
                             transition: 'width 1s linear' // Agrega esta línea
                             // Ancho calculado en píxeles
                         }}></div>
@@ -144,7 +139,7 @@ export default class Overlay extends React.Component {
                             bottom: '365px',
                             height: '10px', // Altura de la barra
                             backgroundColor: 'lightgrey', // Color de fondo
-                            width: `${(state.timer / 30) * 880}px`,
+                            width: `${(state.timer / 30000) * 880}px`,
                             transition: 'width 1s linear' // Agrega esta línea
                             // Ancho calculado en píxeles
                         }}></div>

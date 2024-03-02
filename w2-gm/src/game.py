@@ -102,7 +102,7 @@ class Game:
                     isActive=False
                 )
             )
-        self.viewGame.state.timer = int(new_status.timer/1000)
+        self.viewGame.state.timer = int(new_status.timer)
         self.active_phase(new_status.phase)
 
     def active_phase(self, turn: PickPhasesEnum):
