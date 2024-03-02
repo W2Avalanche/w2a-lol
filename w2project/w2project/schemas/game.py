@@ -1,11 +1,18 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 from enum import Enum, IntEnum, StrEnum
-
+from .team import TeamStruct
 class PickStatusEnum(StrEnum):
     wating = "waiting"
     on_going = "ongoing"
     finished = "finished"
+
+class PositionsEnum(IntEnum):
+    top = 0
+    jungler = 1
+    mid = 2
+    adc = 3
+    support = 4
 
 class PickPhasesEnum(IntEnum):
     ban_blue_1 = 0
@@ -40,6 +47,10 @@ class GameTeam(BaseModel):
     picks: list[str]
     bans: list[str]
     active: bool
+    def swap_champs(self, position_1: PositionsEnum, position_2: PositionsEnum):
+        _buffer = self.picks[position_1]
+        self.picks[position_1] = self.picks[position_2]
+        self.picks[position_2] = _buffer
 
 class GameStatus(BaseModel):
     blue_team : GameTeam
@@ -47,7 +58,11 @@ class GameStatus(BaseModel):
     phase: PickPhasesEnum
     state: PickStatusEnum
     timer : int
-
+    def swap_champs(self, team:str, position_1: PositionsEnum, position_2: PositionsEnum):
+        if team=="blue":
+            self.blue_team.swap_champs(position_1=position_1, position_2=position_2)
+        elif team=="red":
+            self.red_team.swap_champs(position_1=position_1, position_2=position_2)
 class GameConfig(BaseModel):
     blue_team_name: str
     blue_team_logo: str
@@ -58,7 +73,12 @@ class GameConfig(BaseModel):
     tournament_name: str
     tournament_logo: str
     dawe_id: Optional[str]
-
+class GameStruct(BaseModel):
+    dawe_id: str
+    blue_team: TeamStruct
+    red_team: TeamStruct
+    tournament_name: str
+    tournament_logo: str
 class GameMessage(BaseModel):
     origin: str
     type: str
@@ -67,6 +87,20 @@ class GameMessage(BaseModel):
     config: Optional[GameConfig]
     dawe_id: Optional[str]
 
+    def get_init_message_from_schema(origin:str, user: str, game: GameStruct):
+        return GameMessage(origin=origin, type="CREATE", user=user,
+                           status= None, config= GameConfig(
+                               blue_team_name=game.blue_team.name, blue_team_logo=game.blue_team.logo_url,
+                               blue_team_players=game.blue_team.players,
+                               red_team_name=game.red_team.name, red_team_logo=game.red_team.logo_url,
+                               red_team_players=game.red_team.players, tournament_name=game.tournament_name, tournament_logo=game.tournament_logo, dawe_id=game.dawe_id),
+                               dawe_id=game.dawe_id
+        )
+
+class GameSwapRequest(BaseModel):
+    team: str
+    swap_position_1: PositionsEnum
+    swap_position_2: PositionsEnum
 class ViewTeamConfig(BaseModel):
     name: str
     score : int
@@ -107,6 +141,9 @@ class ViewGameState(BaseModel):
     champSelectActive: bool
     leagueConnected: bool
     anyTeam: bool
+
+
 class ViewGame(BaseModel):
     eventType: str 
     state: ViewGameState
+

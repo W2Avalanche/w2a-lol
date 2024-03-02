@@ -22,6 +22,19 @@ Configure the `configuration.json` by defining the propper database data connect
 openssl rand -hex 32
 ```
 
+Configure `.json`:
+
+```json
+{
+    "db_host": "localhost",
+    "db_port": "15432",
+    "db_name": "postgres",
+    "db_user": "postgres",
+    "db_password": "postgres",
+    "auth_secret": "8674582f0f57eed7351bef7927d8a8aa84099fc2122aae2c421a0551c0627e8c"
+}
+```
+
 Run the Uvicorn server by using the uvicorn command
 
 ```bash

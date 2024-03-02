@@ -8,8 +8,12 @@ class Configuration:
         self.database_user = kwargs.get('db_user')
         self.database_password = kwargs.get('db_password')
         self.auth_secret = kwargs.get('auth_secret')
+        self.game_manager = kwargs.get('game_manager')
 
 def read_config(config_file_path) -> Configuration:
     configuration = open(config_file_path, 'r')
     config : Configuration = json.loads(configuration.read())
     return Configuration(**config)
+
+def get_game_json(game) -> str:
+    return json.dumps(game)

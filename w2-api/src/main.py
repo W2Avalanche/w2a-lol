@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from datetime import timedelta
+import websockets
 
 from typing import Annotated
 from fastapi.security import OAuth2PasswordRequestForm
@@ -8,11 +9,17 @@ from database import Base, engine
 from w2project.schemas.auth import User, Token
 from w2project.schemas.team import Team
 from w2project.schemas.player import Player
+from w2project.schemas.game import GameStruct, GameMessage, GameSwapRequest, PickStatusEnum
 
 from crud.crud_player import create_player, get_player_by_nickname, create_or_get_player
 from crud.crud_team import create_team, get_team_by_name, create_or_update_team, get_all_teams
 from deps import get_current_active_user, get_db
 from auth import authenticate_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
+from utils import get_game_json
+import requests
+from utils import read_config, Configuration
+config : Configuration = read_config('../configuration.json')
+
 
 app = FastAPI(
     title="W2 API",
@@ -62,3 +69,30 @@ async def list_team(current_user: Annotated[User, Depends(get_current_active_use
                     db: Session = Depends(get_db) ) -> Team:
     team = get_all_teams(db)
     return team
+
+@app.post("/match")
+async def add_team(game: GameStruct,
+                   current_user: Annotated[User, Depends(get_current_active_user)],
+                   db: Session = Depends(get_db) ):
+    
+    game = GameMessage.get_init_message_from_schema("website", current_user.user_name, game)
+    async with websockets.connect("ws://{}/game".format(config.game_manager)) as websocket:
+        await websocket.send(get_game_json(game.model_dump(mode='json')))
+    return game
+
+@app.put("/match/{match_id}/swap")
+async def swap_positions(match_id: str,  
+                         swap: GameSwapRequest,                  
+                         current_user: Annotated[User, Depends(get_current_active_user)],
+                   db: Session = Depends(get_db) ):
+    game_request = requests.get("http://{}/game/{}".format(config.game_manager, match_id))
+    if game_request.status_code != 200:
+        raise HTTPException(status_code=404, detail="Match {} not found")
+    game = GameMessage(**game_request.json())
+    if game.status.state != PickStatusEnum.finished:
+        raise HTTPException(status_code=400,detail="picks&ban still running")
+    
+    game.status.swap_champs(swap.team, swap.swap_position_1, swap.swap_position_2)
+    async with websockets.connect("ws://{}/game".format(config.game_manager)) as websocket:
+        await websocket.send(get_game_json(game.model_dump(mode='json')))
+    return game

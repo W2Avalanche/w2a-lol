@@ -16,3 +16,8 @@ class TeamCreate(TeamBase):
 class Team(TeamBase):
     class Config:
         from_attrobites = True
+
+class TeamStruct(BaseModel):
+    name: str
+    logo_url: Optional[str]
+    players: list[str]
