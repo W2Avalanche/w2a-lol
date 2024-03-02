@@ -80,4 +80,4 @@ To avoid proxy issues, and since any different test has been done, all URLs shou
 ## Technologies
 
 - PostgreSQL as Database
-- MQTT for intermodule communications
+- [FastAPI](https://fastapi.tiangolo.com/) for REST and WS communications.
