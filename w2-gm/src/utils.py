@@ -1,4 +1,5 @@
 from fastapi import WebSocket
+import requests
 class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
@@ -16,3 +17,6 @@ class ConnectionManager:
                 await connection.send_text(message)
             except:
                 self.disconnect(connection)
+
+def get_current_game_version() -> str:
+    return requests.get("https://ddragon.leagueoflegends.com/api/versions.json").json()[0]

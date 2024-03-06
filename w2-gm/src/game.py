@@ -1,10 +1,11 @@
 from w2project.schemas.game import GameConfig, ViewGame, ViewGameState, ViewGameConfig, ViewTeamConfig, ViewTeamState, PickStatusEnum
 from w2project.schemas.team import Team
 from w2project.schemas.game import GameStatus, ViewSelect, ViewChampion, PickPhasesEnum
-
+from utils import get_current_game_version
 class Game:
     def __init__(self, dawe_id: str, game_config: GameConfig) -> None:
         self.dawe_id: str = dawe_id
+        version = get_current_game_version()
         self.viewGame: ViewGame = ViewGame( eventType= "newState", state= 
             ViewGameState(
                 config = ViewGameConfig(
@@ -26,7 +27,7 @@ class Game:
                         logo= game_config.red_team_logo,
                         color="rgb(162,8,8)"
                     ),
-                    patch= "13.21.1"
+                    patch= version
                 ),
                 blueTeam = ViewTeamState(
                     picks = [],
