@@ -1,5 +1,5 @@
 # W2 Project
-
+A este readme le falta mucho por hacer....
 ## Modules
 
 ![Modules diagram](docs/module-scheme.png)
